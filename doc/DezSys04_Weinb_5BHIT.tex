@@ -5,15 +5,15 @@
 % Change those informations
 % If you need umlauts you have to escape them, e.g. for an ü you have to write \"u
 \gdef\mytitle{Laborprotokoll}
-\gdef\mythema{CORBA Overview}
+\gdef\mythema{DezSys04}
 
-\gdef\mysubject{Systemtechnik Labor}
-\gdef\mycourse{5BHITT 2015/16, GruppeA}
-\gdef\myauthor{Michael Borko}
+\gdef\mysubject{Systemtechnik-Labor}
+\gdef\mycourse{5BHIT 2015/16, Gruppe Z}
+\gdef\myauthor{Michael Weinberger}
 
-\gdef\myversion{0.2}
-\gdef\mybegin{\today}
-\gdef\myfinish{\today}
+\gdef\myversion{1.0}
+\gdef\mybegin{08. Januar 2016}
+\gdef\myfinish{14. Januar 2016}
 
 \gdef\mygrade{Note:}
 \gdef\myteacher{Betreuer: Th.Micheler}
@@ -61,15 +61,117 @@
 \pagestyle{fancy}
 
 %\vspace{-0.5cm}
+\section{Einführung}
+Diese Übung soll zur Vertiefung der Begriffe "Authentifizierung und Autorisierung" dienen.
+\subsection{Ziele}
+Das Ziel dieser Übung ist die Funktionsweise eines Verzeichnisdienstes zu verstehen und Erfahrungen mit der Administration auszuprobieren. Ebenso soll die Verwendung des Dienstes aus einer Anwendung heraus mit Hilfe der JNDI geübt werden. \newline
+Authentifizierung bedeutet hier, dass per Username und Passwort eine Anmeldung beim Verzeichnisdienst erfolgt. Autorisierung wird hier im Zusammenhang mit Service-Gruppen und zugeordneten Usern durchgeführt.
+\subsection{Voraussetzungen}
+\begin{itemize}
+	\item Grundlagen Verzeichnisdienst
+	\item Administration eines LDAP Dienstes
+	\item Verwendung von Commandline Werkzeugen fuer LDAP (LDAPSEARCH, LDAPMODIFY)
+	\item Grundlagen der JNDI API für eine JAVA Implementierung
+	\item Verwendung einer virtuellen Instanz für den Betrieb des Verzeichnisdienstes
+\end{itemize}
+\subsection{Aufgabenstellung}
+Mit Hilfe der zur Verfuegung gestellten VM wird ein vorkonfiguriertes LDAP Service zur Verfuegung gestellt. Dieser Verzeichnisdienst soll um folgende Eintraege erweitert werden. Das verwendete Namensschema (eg. group.service1 oder vorname.nachname) soll fuer alle Eintraege verwendet werden.
+\begin{itemize}
+	\item 5 Posix Groups (beliebe Zuweisung von UserIDs)
+	\item 10 User Accounts
+\end{itemize}
+Weiters soll eine Java-Applikationen zur Authentifizierung und Autorisierung entwickelt werden. Folgende Fragestellungen stehen dabei im Mittelpunkt:
+\begin{itemize}
+	\item Sind Username und Passwort korrekt? 
+(Identifikation des Benutzers)
+	\item Ist der User berechtigt ein bestimmtes Service zu nutzen?
+(Benutzer-Berechtigung)
+\end{itemize}
+\newpage
 
-\input sections/task.tex
-\input sections/solution.tex
+\section{Dokumentation der Arbeitsschritte}
+\subsection{Grundkonfiguration}
+Folgendes Textfile von Prof. Micheler beschreibt das Aufsetzen eines OpenLDAP-Servers, die Grundkonfiguration, Grundlagen in LDAPSEARCH sowie LDAPMODIFY und listet einige weiterführende Links auf. \newline
+\begin{lstlisting}[frame=single, caption=Grundkonfiguration]
+Installation LDAP:
+------------------
+sudo apt-get update
+sudo apt-get install slapd ldap-utils
 
-\clearpage
+sudo dpkg-reconfigure slapd
+> DNS domain name: nodomain.com
+> Organization name: nodomain
+> Administrator password: user
+> Database backend: hdb
+
+Installation phpLDAPadmin:
+--------------------------
+sudo apt-get install phpldapadmin
+
+Configuration phpLDAPadmin:
+---------------------------
+sudo gedit /etc/phpldapadmin/config.php
+
+$servers->setValue('server','host','localhost');
+$servers->setValue('server','base',array('dc=nodomain,dc=com'));
+$servers->setValue('login','bind_id','cn=admin,dc=nodomain,dc=com');
+$config->custom->appearance['hide_template_warning'] = true;
+
+SSL configuration not performed!
+
+Configuration Apache:
+---------------------
+/etc/apache2/mods-enabled/alias.conf: following line added
+Alias /ldap /usr/share/phpldapadmin/htdocs
+
+Link to phpLDAPadmin:
+---------------------
+http://localhost/ldap
+
+Modify LDAP Directory:
+----------------------
+Add new Posix Group: group.default
+Add new Posix Group: group.service1
+Add new Generic User Account: max.mustermann
+Add max.mustermann to group.service1
+
+LDAPSEARCH Commandline Tool / Local:
+------------------------------------
+ldapsearch -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -W
+ldapsearch -h 127.0.0.1 -p 389 -D "cn=max.mustermann,dc=nodomain,dc=com" -W
+
+LDAPSEARCH Commandline Tool / Remote:
+-------------------------------------
+ldapsearch -h 192.168.0.8 -p 389 -D "cn=admin,dc=nodomain,dc=com" -W
+ldapsearch -h 192.168.0.8 -p 389 -D "cn=max.mustermann,dc=nodomain,dc=com" -W -b "dc=nodomain,dc=com"
+ldapsearch -h 192.168.0.8 -p 389 -D "cn=max.mustermann,dc=nodomain,dc=com" -W -b "cn=group.service2,dc=nodomain,dc=com" memberUid
+ldapsearch -h 192.168.0.8 -p 389 -D "cn=max.mustermann,dc=nodomain,dc=com" -W -b "dc=nodomain,dc=com" "cn=group.*" memberUid
+ldapsearch -h 192.168.0.8 -p 389 -D "cn=max.mustermann,dc=nodomain,dc=com" -W -b "dc=nodomain,dc=com" "(objectclass=PosixGroup)"
+
+\end{lstlisting}
+\newpage
+\begin{lstlisting}[frame=single, caption=Grundkonfiguration]
+LDAPMODIFY Commandline Tool / Remote:
+-------------------------------------
+ldapmodify -h 192.168.0.8 -p 389 -D "cn=admin,dc=nodomain,dc=com" -W  
+dn: cn=group.service1,dc=nodomain,dc=com             
+changetype: modify
+replace: description
+description: test
+
+
+Links:
+------
+http://docs.oracle.com/javase/tutorial/jndi/index.html
+http://www.stefan-seelmann.de/media/presentations/JUGM2008_JavaUndLDAP.pdf
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-openldap-and-phpldapadmin-on-an-ubuntu-14-04-server
+\end{lstlisting}
+
+\subsection{Anlegen von 5 Gruppen und 10 User-Accounts}
+\newpage
 
 \bibliographystyle{unsrt}
-\bibliography{references}
-\listoftables
+\bibliography{quellen}
 \lstlistoflistings
 \listoffigures
 
