@@ -36,13 +36,3 @@ Weiters soll eine Java-Applikationen zur Authentifizierung und Autorisierung ent
 
 - Sind Username und Passwort korrekt? (Identifikation des Benutzers)
 - Ist der User berechtigt ein bestimmtes Service zu nutzen? (Benutzer-Berechtigung)
-
-Bewertung:
-
-- Dokumentation der einzelnen Arbeitsschritte im Protokoll
-- Anlegen von 5 Gruppen und 10 User Accounts
-- wenn fremdes LDAP-Service verwendet wird, dann Dokumentation von 3 LDAPSEARCH und 2 LDAPMODIFY Befehlen
-- Authentifizierung
-- Autorisierung
-- Wie ist eine LDAP Aenderung moeglich mit bestimmten Benutzer (ungleich admin)?
-- Brute Force Implementierung
