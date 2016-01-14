@@ -173,7 +173,7 @@ Um einen User zu erstellen findet sich unter 'Create new entry here' der Eintrag
 \begin{figure}[h]
 	\centering \includegraphics[keepaspectratio=true, scale=0.65]{images/10user5groups}
 	\caption{10 User-Accounts, 5 Posix-Groups}
-\end{figure} \\
+\end{figure}
 \newpage
 \subsection{LDAPSEARCH und LDAPMODIFY}
 \subsubsection{LDAPSEARCH 1}
@@ -190,14 +190,21 @@ Gleiches Vorgehen wie bei LDAPSEARCH 1, jedoch wird nun von 'außen' auf den LDA
 \begin{lstlisting}[frame=single, language=bash, caption=3.Befehl]
 ldapsearch -h 192.168.128.136 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user -b "dc=nodomain,dc=com"
 \end{lstlisting} 
+Wieder ein Zugriff von außen, mithilfe von -b kann der Startpunkt der Suche angegeben werden, hier wird der gesamte Inhalt unserer Domäne ausgegeben.
 \subsubsection{LDAPMODIFY 1}
 \begin{lstlisting}[frame=single, language=bash, caption=4.Befehl]
-ldapsearch -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user
+ldapmodify -h 192.168.0.8 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user
+dn: cn=michael.weinberger,dc=nodomain,dc=com
+changetype: modify
+replace: sn
+sn: Mueller
 \end{lstlisting} 
+Zugriff von außen, mein Nachname wird per Befehl auf den Namen 'Müller' gesetzt.
 \subsubsection{LDAPMODIFY 2}
 \begin{lstlisting}[frame=single, language=bash, caption=5.Befehl]
-ldapsearch -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user
+ldapmodify -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user -f /home/user/Documents/SYT/
 \end{lstlisting} 
+Lokaler Aufruf, 
 \newpage
 
 \bibliographystyle{unsrt}
