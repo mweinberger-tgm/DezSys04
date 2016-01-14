@@ -199,7 +199,7 @@ changetype: modify
 replace: sn
 sn: Mueller
 \end{lstlisting} 
-Zugriff von außen, mein Nachname wird per Befehl auf den Namen 'Müller' gesetzt.
+Zugriff von außen, der Nachname ('sn') wird per Befehl auf den Namen 'Müller' gesetzt.
 \subsubsection{LDAPMODIFY 2}
 \begin{lstlisting}[frame=single, language=bash, caption=5.Befehl]
 ldapmodify -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user 
@@ -208,10 +208,11 @@ ldapmodify -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user
 Lokaler Aufruf, liest anstatt von stdin die Änderungsinformationen aus einem LDIF-File (LDAP Data Interchange Format), das derselben Struktur entsprechen muss.
 \newpage
 
+\section{Authentifizierung}
+\section{Autorisierung}
+\section{LDAP-Änderung mit bestimmten User}
+\newpage
 
-
-\bibliographystyle{unsrt}
-\bibliography{quellen}
 \lstlistoflistings
 \listoffigures
 
