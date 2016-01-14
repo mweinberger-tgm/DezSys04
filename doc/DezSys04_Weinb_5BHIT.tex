@@ -175,7 +175,29 @@ Um einen User zu erstellen findet sich unter 'Create new entry here' der Eintrag
 	\caption{10 User-Accounts, 5 Posix-Groups}
 \end{figure} \\
 \newpage
-Hallo!
+\subsection{LDAPSEARCH und LDAPMODIFY}
+\subsubsection{LDAPSEARCH 1}
+\begin{lstlisting}[frame=single, language=bash, caption=1.Befehl]
+ldapsearch -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user
+\end{lstlisting} 
+Mit diesem Befehl wird erfolgreich ein Bind auf den Localhost-LDAP-Server (Port 389/TLS) durchgeführt, ohne Suchanfrage und ohne nennenswerte Ausgabe.
+\subsubsection{LDAPSEARCH 2}
+\begin{lstlisting}[frame=single, language=bash, caption=2.Befehl]
+ldapsearch -h 192.168.128.136 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user
+\end{lstlisting} 
+Gleiches Vorgehen wie bei LDAPSEARCH 1, jedoch wird nun von 'außen' auf den LDAP-Server zugegriffen.
+\subsubsection{LDAPSEARCH 3}
+\begin{lstlisting}[frame=single, language=bash, caption=3.Befehl]
+ldapsearch -h 192.168.128.136 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user -b "dc=nodomain,dc=com"
+\end{lstlisting} 
+\subsubsection{LDAPMODIFY 1}
+\begin{lstlisting}[frame=single, language=bash, caption=4.Befehl]
+ldapsearch -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user
+\end{lstlisting} 
+\subsubsection{LDAPMODIFY 2}
+\begin{lstlisting}[frame=single, language=bash, caption=5.Befehl]
+ldapsearch -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user
+\end{lstlisting} 
 \newpage
 
 \bibliographystyle{unsrt}
