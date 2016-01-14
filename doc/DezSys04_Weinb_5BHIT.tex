@@ -168,6 +168,14 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-op
 \end{lstlisting}
 
 \subsection{Anlegen von 5 Gruppen und 10 User-Accounts}
+In der beschriebenen Testumgebung ist die phpLDAPadmin-Oberfläche via \textit{http://localhost/ldap/} aufzurufen. Im Login-Screen meldet man sich per Credentials \\ \textit{cn=admin,dc=nodomain,dc=com} und \textit{user} an. In der Adminoberfläche findet sich im linken Menü der Eintrag 'Create new entry here'. Eine Liste an Templates für den Erstellungsprozess wird angezeigt, wir wählen zuerst 'Generic: Posix Group' aus. Die GID-Nummer wird automatisch generiert, der Gruppe kann auch ein Name gegeben werden, in unserem Fall 'service1' bis 'service5'. \\ \\
+Um einen User zu erstellen findet sich unter 'Create new entry here' der Eintrag 'Generic: User Account'. Relevant bei der Eingabe ist der Vor- und Nachname, die GID-Nummer (zugehörige Gruppe) und das Passwort, der Rest wird automatisch generiert aus den bereitgestellten Daten, kann gegebenenfalls trotzdem noch angepasst werden. \\
+\begin{figure}[h]
+	\centering \includegraphics[keepaspectratio=true, scale=0.65]{images/10user5groups}
+	\caption{10 User-Accounts, 5 Posix-Groups}
+\end{figure} \\
+\newpage
+Hallo!
 \newpage
 
 \bibliographystyle{unsrt}
