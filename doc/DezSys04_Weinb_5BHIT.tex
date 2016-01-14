@@ -202,10 +202,13 @@ sn: Mueller
 Zugriff von außen, mein Nachname wird per Befehl auf den Namen 'Müller' gesetzt.
 \subsubsection{LDAPMODIFY 2}
 \begin{lstlisting}[frame=single, language=bash, caption=5.Befehl]
-ldapmodify -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user -f /home/user/Documents/SYT/
+ldapmodify -h 127.0.0.1 -p 389 -D "cn=admin,dc=nodomain,dc=com" -w user 
+-f /home/user/Documents/SYT/data.ldif
 \end{lstlisting} 
-Lokaler Aufruf, 
+Lokaler Aufruf, liest anstatt von stdin die Änderungsinformationen aus einem LDIF-File (LDAP Data Interchange Format), das derselben Struktur entsprechen muss.
 \newpage
+
+
 
 \bibliographystyle{unsrt}
 \bibliography{quellen}
