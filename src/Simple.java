@@ -45,17 +45,19 @@ class Simple {
 
         Hashtable<String, Object> env = new Hashtable<String, Object>(11);
 
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, "ldap://"+ JOptionPane.showInputDialog(null, "IP-Adresse eingeben", "Michael Weinberger 5BHIT", JOptionPane.PLAIN_MESSAGE) +":389");
-        env.put(Context.SECURITY_AUTHENTICATION, "simple");
-        String username = JOptionPane.showInputDialog(null, "Bind-User angeben", "Michael Weinberger 5BHIT", JOptionPane.PLAIN_MESSAGE);
-        env.put(Context.SECURITY_PRINCIPAL, "cn=" + username +",dc=nodomain,dc=com");
-        env.put(Context.SECURITY_CREDENTIALS, JOptionPane.showInputDialog(null, "Passwort angeben", "Michael Weinberger 5BHIT", JOptionPane.PLAIN_MESSAGE));
-
-        String group = JOptionPane.showInputDialog(null, "Gruppe angeben", "Michael Weinberger 5BHIT", JOptionPane.PLAIN_MESSAGE);
-
-        System.out.println("Verbindungsversuch...");
         try {
+
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+            env.put(Context.PROVIDER_URL, "ldap://"+ JOptionPane.showInputDialog(null, "IP-Adresse eingeben", "Michael Weinberger 5BHIT", JOptionPane.PLAIN_MESSAGE) +":389");
+            env.put(Context.SECURITY_AUTHENTICATION, "simple");
+            String username = JOptionPane.showInputDialog(null, "Bind-User angeben", "Michael Weinberger 5BHIT", JOptionPane.PLAIN_MESSAGE);
+            env.put(Context.SECURITY_PRINCIPAL, "cn=" + username +",dc=nodomain,dc=com");
+            env.put(Context.SECURITY_CREDENTIALS, JOptionPane.showInputDialog(null, "Passwort angeben", "Michael Weinberger 5BHIT", JOptionPane.PLAIN_MESSAGE));
+
+            String group = JOptionPane.showInputDialog(null, "Gruppe angeben", "Michael Weinberger 5BHIT", JOptionPane.PLAIN_MESSAGE);
+
+            System.out.println("Verbindungsversuch...");
+
             DirContext ctx = new InitialDirContext(env);
             System.out.println("OK");
             JOptionPane.showMessageDialog(null, "OK", "Michael Weinberger 5BHIT", JOptionPane.INFORMATION_MESSAGE);
@@ -64,7 +66,6 @@ class Simple {
             searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
             searchControls.setTimeLimit(30000);
 
-            // Check if the user is in the given group
             NamingEnumeration<?> namingEnum = ctx.search("cn=" + group + ",dc=nodomain,dc=com", "(objectclass=posixGroup)", searchControls);
 
             while (namingEnum.hasMore ()) {
@@ -72,12 +73,17 @@ class Simple {
                 Attributes attrs = result.getAttributes ();
                 System.out.println("Authorization for group " + group + " " + (attrs.get("memberUID") != null &&
                         attrs.get("memberUid").contains(username) ? "OK" : "NOK"));
-
+                JOptionPane.showMessageDialog(null, "Autorisierung für Gruppe " + group + " " + (attrs.get("memberUID") != null &&
+                        attrs.get("memberUid").contains(username) ? "OK" : "NOK"), "Michael Weinberger 5BHIT", JOptionPane.INFORMATION_MESSAGE);
             }
             ctx.close();
             System.exit(0);
 
         } catch (NamingException e) {
+            System.out.println("NOK");
+            JOptionPane.showMessageDialog(null, "NOK", "Michael Weinberger 5BHIT", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        } catch (NullPointerException e) {
             System.out.println("NOK");
             JOptionPane.showMessageDialog(null, "NOK", "Michael Weinberger 5BHIT", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
