@@ -209,10 +209,27 @@ Lokaler Aufruf, liest anstatt von stdin die Änderungsinformationen aus einem LD
 \newpage
 
 \section{Authentifizierung}
+Im Oracle JNDI Tutorial ist der Beispielcode implementiert worden, der für unsere Anwendung relevant ist. [1] \\
+Via JOptionPane wird der User aufgefordert die Parameter einzugeben, ist daher nicht statisch und für jeden LDAP-Server, der unserem Aufbau ähnelt einsetzbar. Sofern der Bind auf den LDAP-Server geglückt ist, wird ein 'OK' ausgegeben, andernfalls 'NOK'.
 \section{Autorisierung}
+Um auch zu überprüfen, dass der User autorisiert ist (Mitglied einer Gruppe) wurde Sourcecode eines Forums bezogen [2]. Über 'SearchControls' (javax.naming.directory.SearchControls) kann in einem LDAP-Verzeichnis gesucht werden. Enthält die Gruppe das Attribut 'memberuid', so wird OK ausgegeben, andernfalls NOK.
 \section{LDAP-Änderung mit bestimmten User}
+Änderungen ohne Adminrechte lassen sich per ACL (Access Control List) definieren. In jener kann man bestimmte Rechte für Benutzer, Gruppen zuteilen. Diese Konfiguration muss in der slapd-Konfigurationsdatei \textit{/etc/ldap/slap.d} vorgenommen werden. \\
+\begin{lstlisting}[frame=single, language=bash, caption=ACL]
+access to dn.subtree="dc=example,dc=com" attrs=homePhone
+        by self write
+        by dn.children="dc=example,dc=com" search
+        by peername.regex=IP:10\..+ read
+    access to dn.subtree="dc=example,dc=com"
+        by self write
+        by dn.children="dc=example,dc=com" search
+        by anonymous auth
+\end{lstlisting} 
 \newpage
 
+\section{Quellen}
+[1]: http://docs.oracle.com/javase/tutorial/jndi/ldap/examples/Simple.java, Oracle Documentation, zuletzt abgerufen am 14.01.2016 \newline
+[2]: http://stackoverflow.com/questions/2172831/how-do-a-ldap-search-authenticate-against-this-ldap-in-java, leider Gottes Stack Overflow, zuletzt abgerufen am 14.01.2016 \\
 \lstlistoflistings
 \listoffigures
 

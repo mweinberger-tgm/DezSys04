@@ -73,8 +73,8 @@ class Simple {
                 Attributes attrs = result.getAttributes ();
                 System.out.println("Authorization for group " + group + " " + (attrs.get("memberUID") != null &&
                         attrs.get("memberUid").contains(username) ? "OK" : "NOK"));
-                JOptionPane.showMessageDialog(null, "Autorisierung für Gruppe " + group + " " + (attrs.get("memberUID") != null &&
-                        attrs.get("memberUid").contains(username) ? "OK" : "NOK"), "Michael Weinberger 5BHIT", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, group + (attrs.get("memberUID") != null &&
+                        attrs.get("memberUid").contains(username) ? " = OK" : " = NOK"), "Michael Weinberger 5BHIT", JOptionPane.INFORMATION_MESSAGE);
             }
             ctx.close();
             System.exit(0);
